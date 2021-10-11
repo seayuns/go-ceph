@@ -16,7 +16,7 @@ func TestPtrGuard(t *testing.T) {
 		goPtr := (unsafe.Pointer)(&s)
 		cPtr := Malloc(PtrSize)
 		defer Free(cPtr)
-		pg := NewPtrGuard(cPtr, goPtr)
+		pg := NewPtrGuard(goPtr).Store(cPtr)
 		assert.Equal(t, *(*unsafe.Pointer)(cPtr), goPtr)
 		pg.Release()
 		assert.Zero(t, *(*unsafe.Pointer)(cPtr))
@@ -27,7 +27,7 @@ func TestPtrGuard(t *testing.T) {
 		goPtr := (unsafe.Pointer)(&s)
 		cPtr := Malloc(PtrSize)
 		defer Free(cPtr)
-		pg := NewPtrGuard(cPtr, goPtr)
+		pg := NewPtrGuard(goPtr).Store(cPtr)
 		assert.Equal(t, *(*unsafe.Pointer)(cPtr), goPtr)
 		pg.Release()
 		pg.Release()
@@ -51,7 +51,7 @@ func TestPtrGuard(t *testing.T) {
 		}
 		cPtr := Malloc(PtrSize)
 		defer Free(cPtr)
-		pg := NewPtrGuard(cPtr, goPtr(&pgDone))
+		pg := NewPtrGuard(goPtr(&pgDone)).Store(cPtr)
 		u := uintptr(goPtr(&uDone))
 		runtime.GC()
 		assert.Eventually(t, func() bool { return uDone },
@@ -77,7 +77,7 @@ func TestPtrGuard(t *testing.T) {
 			if ptrGuards[i] == nil {
 				goPtr := unsafe.Pointer(&(struct{ byte }{42}))
 				cPtrPtr := CPtr(&cPtrArr[i])
-				ptrGuards[i] = NewPtrGuard(cPtrPtr, goPtr)
+				ptrGuards[i] = NewPtrGuard(goPtr).Store(cPtrPtr)
 				assert.Equal(t, (unsafe.Pointer)(cPtrArr[i]), goPtr)
 			} else {
 				ptrGuards[i].Release()

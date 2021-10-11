@@ -15,7 +15,7 @@ type SyncBuffer struct {
 // NewSyncBuffer creates a C buffer from a data slice and stores it at CPtr
 func NewSyncBuffer(cPtr CPtr, data []byte) *SyncBuffer {
 	var v SyncBuffer
-	v.pg = NewPtrGuard(cPtr, unsafe.Pointer(&data[0]))
+	v.pg = NewPtrGuard(unsafe.Pointer(&data[0])).Store(cPtr)
 	return &v
 }
 
