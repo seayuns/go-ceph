@@ -205,10 +205,10 @@ test-bins: test-binaries
 	$(GO_CMD) test -c -tags $(BUILD_TAGS) ./$<
 
 implements:
-	$(GO_CMD) build -o implements ./contrib/implements
+	$(GO_CMD) build -modfile go.contrib.mod -o implements ./contrib/implements
 
 check-implements: implements
-	./implements $(IMPLEMENTS_OPTS) ./cephfs ./rados ./rbd
+	./implements $(IMPLEMENTS_OPTS) cephfs rados rbd
 
 # force_go_build is phony and builds nothing, can be used for forcing
 # go toolchain commands to always run
