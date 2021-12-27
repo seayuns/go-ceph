@@ -1,4 +1,4 @@
-// +build luminous mimic
+// +build  mimic
 // +build !nautilus
 //
 // Ceph Nautilus introduced rbd_get_parent() and deprecated rbd_get_parent_info().
